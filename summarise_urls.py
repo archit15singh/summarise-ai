@@ -49,16 +49,19 @@ def scrape_links_iteration(start_url, max_depth):
     return scraped_links
 
 def process_url(url):
-    print(f"Processing URL: {url}")
-    loader = WebBaseLoader(url)
-    docs = loader.load()
-    print(f"length: {len(docs[0].page_content)} for url: {url}")
-
-    llm = Ollama(model="llama2")
-    chain = load_summarize_chain(llm, chain_type="stuff")
-    result = chain.run(docs)
-    print(f"Length of result for {url}: {len(result)}")
-    print(result)
+    try:
+        print(f"Processing URL: {url}")
+        loader = WebBaseLoader(url)
+        docs = loader.load()
+        print(f"length: {len(docs[0].page_content)} for url: {url}")
+    
+        llm = Ollama(model="llama2")
+        chain = load_summarize_chain(llm, chain_type="stuff")
+        result = chain.run(docs)
+        print(f"Length of result for {url}: {len(result)}")
+        print(result)
+    except Exception as e:
+        print(str(e))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
