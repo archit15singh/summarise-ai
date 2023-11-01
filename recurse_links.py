@@ -3,6 +3,9 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from collections import deque
 import argparse
+from langchain.llms import Ollama
+from langchain.document_loaders import WebBaseLoader
+from langchain.chains.summarize import load_summarize_chain
 
 def scrape_links_recursive(start_url, max_depth):
     visited = set()
@@ -37,6 +40,18 @@ def scrape_links_recursive(start_url, max_depth):
 
     scraped_links = list(set(scraped_links))
     return scraped_links
+
+def process_url(url):
+    print(f"Processing URL: {url}")
+    loader = WebBaseLoader(url)
+    docs = loader.load()
+    print(f"Loaded {len(docs)} documents from {url}")
+
+    llm = Ollama(model="mistral-openorca")
+    chain = load_summarize_chain(llm, chain_type="stuff")
+    result = chain.run(docs)
+    print(f"Length of result for {url}: {len(result)}")
+    print(result)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
