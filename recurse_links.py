@@ -7,6 +7,7 @@ import argparse
 def scrape_links_recursive(start_url, max_depth):
     visited = set()
     to_visit = deque([(start_url, 0)])
+    scraped_links = []
 
     while to_visit:
         current_url, depth = to_visit.popleft()
@@ -27,12 +28,15 @@ def scrape_links_recursive(start_url, max_depth):
                     if href:
                         absolute_url = urljoin(current_url, href)
                         if absolute_url.startswith(base_url):
-                            print(absolute_url)
+                            scraped_links.append(absolute_url)
                             to_visit.append((absolute_url, depth + 1))
                             visited.add(absolute_url)
 
         except Exception as e:
             print(f"Error: {str(e)}")
+
+    scraped_links = list(set(scraped_links))
+    return scraped_links
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -44,4 +48,6 @@ if __name__ == "__main__":
     max_depth = args.max_depth
     start_url = base_url
 
-    scrape_links_recursive(start_url, max_depth)
+    unique_scraped_links = scrape_links_recursive(start_url, max_depth)
+    for link in unique_scraped_links:
+        print(link)
