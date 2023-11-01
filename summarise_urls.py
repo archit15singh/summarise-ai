@@ -147,4 +147,3 @@ if __name__ == "__main__":
             executor.submit(process_url, link, data_folder)
             print('*' * 100)
             print_usage_info()  # Print CPU and RAM usage
-            time.sleep(5)
