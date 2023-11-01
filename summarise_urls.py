@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urljoin
+from urllib.parse import urljoin, urlparse
 from collections import deque
 import argparse
 from langchain.llms import Ollama
@@ -31,7 +31,11 @@ def scrape_links_iteration(start_url, max_depth):
                     href = link.get('href')
                     if href:
                         absolute_url = urljoin(current_url, href)
-                        if absolute_url.startswith(base_url):
+                        
+                        parsed_absolute_url = urlparse(absolute_url)
+                        parsed_base_url = urlparse(base_url)
+                        
+                        if parsed_absolute_url.netloc == parsed_base_url.netloc:
                             scraped_links.append(absolute_url)
                             to_visit.append((absolute_url, depth + 1))
 
