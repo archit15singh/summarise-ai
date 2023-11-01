@@ -65,4 +65,4 @@ if __name__ == "__main__":
 
     unique_scraped_links = scrape_links_recursive(start_url, max_depth)
     for link in unique_scraped_links:
-        print(link)
+        process_url(link)
