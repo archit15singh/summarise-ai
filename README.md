@@ -3,6 +3,7 @@
 - provide a base url to it
 - it will get all the links in it recursively
 - it will scrape the content from all the urls and summarise the text for each.
+- all of these are run using threadpoolexecutor for faster execution (the more cores the better 🚀)
 
 
 docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/llama2
