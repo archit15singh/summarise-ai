@@ -11,4 +11,4 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
-python summarise_urls.py --base_url https://ollama.ai/blog --max_depth 2
+python summarise_urls.py --base_url https://ollama.ai/blog --max_depth 2 --data_folder ollama
