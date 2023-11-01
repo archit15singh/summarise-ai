@@ -4,11 +4,16 @@ from urllib.parse import urljoin, urlparse
 from collections import deque
 import argparse
 from tqdm import tqdm
+import os
 from langchain.llms import Ollama
 from langchain.document_loaders import WebBaseLoader
 from langchain.chains.summarize import load_summarize_chain
 
-def scrape_links_iteration(start_url, max_depth):
+def save_response_to_file(response, filename):
+    with open(filename, 'w', encoding='utf-8') as file:
+        file.write(response.text)
+
+def scrape_links_iteration(start_url, max_depth, data_folder):
     visited = set()
     to_visit = deque([(start_url, 0)])
     scraped_links = []
@@ -41,6 +46,12 @@ def scrape_links_iteration(start_url, max_depth):
                             scraped_links.append(absolute_url)
                             to_visit.append((absolute_url, depth + 1))
                             visited.add(absolute_url)
+                
+                # Save the response to a file with a suitable filename
+                domain_folder = os.path.join(data_folder, parsed_absolute_url.netloc)
+                os.makedirs(domain_folder, exist_ok=True)
+                filename = os.path.join(domain_folder, f"{parsed_absolute_url.path.replace('/', '_')}.txt")
+                save_response_to_file(response, filename)
 
         except Exception as e:
             print(f"Error: {str(e)}")
@@ -67,13 +78,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--base_url", type=str, required=True, help="Base URL to start scraping from")
     parser.add_argument("--max_depth", type=int, required=True, help="Maximum depth for recursion")
+    parser.add_argument("--data_folder", type=str, required=True, help="Folder to save response data")
     args = parser.parse_args()
 
     base_url = args.base_url
     max_depth = args.max_depth
     start_url = base_url
+    data_folder = args.data_folder
 
-    unique_scraped_links = scrape_links_iteration(start_url, max_depth)
+    unique_scraped_links = scrape_links_iteration(start_url, max_depth, data_folder)
     print(f"Found {len(unique_scraped_links)} final links from base URL: {base_url}")
 
     for link in tqdm(unique_scraped_links, desc="Processing Links"):
