@@ -45,7 +45,7 @@ def process_url(url):
     print(f"Processing URL: {url}")
     loader = WebBaseLoader(url)
     docs = loader.load()
-    print(f"length: {len(docs[0])} for url: {url}")
+    print(f"length: {len(docs[0].page_content)} for url: {url}")
 
     llm = Ollama(model="mistral-openorca")
     chain = load_summarize_chain(llm, chain_type="stuff")
