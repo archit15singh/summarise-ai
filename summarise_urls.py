@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from collections import deque
 import argparse
+from tqdm import tqdm
 from langchain.llms import Ollama
 from langchain.document_loaders import WebBaseLoader
 from langchain.chains.summarize import load_summarize_chain
@@ -27,8 +28,8 @@ def scrape_links_iteration(start_url, max_depth):
                 soup = BeautifulSoup(response.text, 'html.parser')
 
                 links = soup.find_all('a')
-                print(f'found {len(links)} in url: {current_url}')
-                for link in links:
+                tqdm_links = tqdm(links, desc=f"Scraping {current_url}")
+                for link in tqdm_links:
                     href = link.get('href')
                     if href:
                         absolute_url = urljoin(current_url, href)
@@ -70,7 +71,8 @@ if __name__ == "__main__":
     start_url = base_url
 
     unique_scraped_links = scrape_links_iteration(start_url, max_depth)
-    print(f"found {len(unique_scraped_links)} final from url:{base_url}")
-    for link in unique_scraped_links:
+    print(f"Found {len(unique_scraped_links)} final links from base URL: {base_url}")
+
+    for link in tqdm(unique_scraped_links, desc="Processing Links"):
         print('*'*100)
         process_url(link)
