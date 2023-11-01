@@ -52,6 +52,8 @@ def scrape_links(url):
                 href = link.get('href')
                 if href:
                     absolute_url = urljoin(url, href)
+                    if '#' in absolute_url:
+                        continue
 
                     parsed_absolute_url = urlparse(absolute_url)
                     parsed_base_url = urlparse(base_url)
