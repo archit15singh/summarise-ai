@@ -26,7 +26,9 @@ def scrape_links_recursive(start_url, max_depth):
             if response.status_code == 200:
                 soup = BeautifulSoup(response.text, 'html.parser')
 
-                for link in soup.find_all('a'):
+                links = soup.find_all('a')
+                print(f'found {len(links)} in url: {url}')
+                for link in links:
                     href = link.get('href')
                     if href:
                         absolute_url = urljoin(current_url, href)
