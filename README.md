@@ -14,5 +14,5 @@ pip install -r requirements.txt
 
 try:
 - python summarise_urls.py --base_url https://ollama.ai/blog --max_depth 2 --data_folder ollama
-- python summarise_urls.py --base_url https://yourstory.com/ --max_depth 2 --data_folder yourstory
+- python summarise_urls.py --base_url https://yourstory.com/companies --max_depth 2 --data_folder yourstory
 - python summarise_urls.py --base_url https://openai.com/blog --max_depth 2 --data_folder openai
