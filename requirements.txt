@@ -1,4 +1,4 @@
 langchain[llms]
 bs4
 requests
-
+tqdm
