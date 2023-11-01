@@ -12,7 +12,6 @@ from concurrent.futures import ThreadPoolExecutor
 import psutil
 import time
 
-
 def save_result_to_file(result, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(result)
@@ -116,6 +115,7 @@ def process_url(url, data_folder):
 
 
 if __name__ == "__main__":
+    s = time.time()
     parser = argparse.ArgumentParser()
     parser.add_argument("--base_url",
                         type=str,
@@ -149,3 +149,5 @@ if __name__ == "__main__":
             executor.submit(process_url, link, data_folder)
             print('*' * 100)
             print_usage_info()  # Print CPU and RAM usage
+    e = time.time()
+    print(e-s)
