@@ -48,7 +48,7 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
                             visited.add(absolute_url)
 
         except Exception as e:
-            print(f"Error: {str(e}")
+            print(f"Error: {str(e)}")
 
     scraped_links = list(set(scraped_links))
     return scraped_links
