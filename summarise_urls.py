@@ -98,6 +98,7 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
 
 def process_url(url, data_folder):
     try:
+        print_usage_info()  # Print CPU and RAM usage
         # print(f"Processing URL: {url}")
         loader = WebBaseLoader(url)
         docs = loader.load()
@@ -106,7 +107,7 @@ def process_url(url, data_folder):
         llm = Ollama(model="llama2")
         chain = load_summarize_chain(llm, chain_type="stuff")
         result = chain.run(docs)
-        print(f"Length of result for {url}: {len(result)}")
+        print(f"Length of result for {url}: {len(result)} -> written to file")
         result_filename = os.path.join(data_folder,
                                        f"{url.replace('/', '_')}_result.txt")
         save_result_to_file(result, result_filename)
@@ -147,7 +148,5 @@ if __name__ == "__main__":
     with ThreadPoolExecutor(max_workers=5) as executor:
         for link in tqdm(unique_scraped_links):
             executor.submit(process_url, link, data_folder)
-            print('*' * 100)
-            print_usage_info()  # Print CPU and RAM usage
     e = time.time()
     print(e-s)
