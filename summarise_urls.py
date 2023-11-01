@@ -8,13 +8,14 @@ import os
 from langchain.llms import Ollama
 from langchain.document_loaders import WebBaseLoader
 from langchain.chains.summarize import load_summarize_chain
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 import psutil
 import time
 
 def save_result_to_file(result, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(result)
+
 
 def create_or_empty_folder(folder_path):
     if not os.path.exists(folder_path):
@@ -25,20 +26,24 @@ def create_or_empty_folder(folder_path):
             if os.path.isfile(file_path):
                 os.unlink(file_path)
 
+
 def get_cpu_ram_usage():
     cpu_percent = psutil.cpu_percent()
     ram_percent = psutil.virtual_memory().percent
     return cpu_percent, ram_percent
 
+
 def print_usage_info():
     cpu_percent, ram_percent = get_cpu_ram_usage()
     print(f"CPU Usage: {cpu_percent}% | RAM Usage: {ram_percent}%")
+
 
 def scrape_links(url):
     try:
         response = requests.get(url)
         if response.status_code == 200:
             soup = BeautifulSoup(response.text, 'html.parser')
+
             links = soup.find_all('a')
             scraped_links = []
 
@@ -61,6 +66,7 @@ def scrape_links(url):
         print(f"Error: {str(e)}")
 
     return []
+
 
 def scrape_links_iteration(start_url, max_depth, data_folder):
     visited = set()
@@ -89,6 +95,7 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
 
     return scraped_links
 
+
 def process_url(url, data_folder):
     try:
         print(f"Processing URL: {url}")
@@ -100,17 +107,28 @@ def process_url(url, data_folder):
         chain = load_summarize_chain(llm, chain_type="stuff")
         result = chain.run(docs)
         print(f"Length of result for {url}: {len(result)}")
-        result_filename = os.path.join(data_folder, f"{url.replace('/', '_')}_result.txt")
+        result_filename = os.path.join(data_folder,
+                                       f"{url.replace('/', '_')}_result.txt")
         save_result_to_file(result, result_filename)
     except Exception as e:
         print(str(e))
 
+
 if __name__ == "__main__":
     s = time.time()
     parser = argparse.ArgumentParser()
-    parser.add_argument("--base_url", type=str, required=True, help="Base URL to start scraping from")
-    parser.add_argument("--max_depth", type=int, required=True, help="Maximum depth for recursion")
-    parser.add_argument("--data_folder", type=str, required=True, help="Folder to save results")
+    parser.add_argument("--base_url",
+                        type=str,
+                        required=True,
+                        help="Base URL to start scraping from")
+    parser.add_argument("--max_depth",
+                        type=int,
+                        required=True,
+                        help="Maximum depth for recursion")
+    parser.add_argument("--data_folder",
+                        type=str,
+                        required=True,
+                        help="Folder to save results")
     args = parser.parse_args()
 
     base_url = args.base_url
@@ -120,10 +138,13 @@ if __name__ == "__main__":
 
     create_or_empty_folder(data_folder)  # Create or empty the data folder
 
-    unique_scraped_links = scrape_links_iteration(start_url, max_depth, data_folder)
-    print(f"Found {len(unique_scraped_links)} final links from base URL: {base_url}")
+    unique_scraped_links = scrape_links_iteration(start_url, max_depth,
+                                                  data_folder)
+    print(
+        f"Found {len(unique_scraped_links)} final links from base URL: {base_url}"
+    )
 
-    with ProcessPoolExecutor(max_workers=5) as executor:
+    with ThreadPoolExecutor(max_workers=5) as executor:
         for link in tqdm(unique_scraped_links):
             executor.submit(process_url, link, data_folder)
             print('*' * 100)
