@@ -75,7 +75,7 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
                     visited.add(link)
 
             except Exception as e:
-                print(f"Error: {str(e}")
+                print(f"Error: {str(e)}")
 
     return scraped_links
 
@@ -93,7 +93,7 @@ def process_url(url, data_folder):
         result_filename = os.path.join(data_folder, f"{url.replace('/', '_')}_result.txt")
         save_result_to_file(result, result_filename)
     except Exception as e:
-        print(str(e)
+        print(str(e))
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
