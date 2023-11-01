@@ -13,3 +13,4 @@ pip install -r requirements.txt
 
 change url in summ.py
 python summ.py
+python recurse_links.py --base_url https://ollama.ai/blog --max_depth 2
