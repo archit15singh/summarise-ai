@@ -11,7 +11,7 @@ from langchain.chains.summarize import load_summarize_chain
 
 def save_result_to_file(result, filename):
     with open(filename, 'w', encoding='utf-8') as file:
-        file.write('\n'.join(result))
+        file.write(result)
 
 def create_or_empty_folder(folder_path):
     if not os.path.exists(folder_path):
