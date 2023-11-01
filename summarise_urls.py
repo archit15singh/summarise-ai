@@ -8,7 +8,6 @@ from langchain.document_loaders import WebBaseLoader
 from langchain.chains.summarize import load_summarize_chain
 
 def scrape_links_iteration(start_url, max_depth):
-    visited = set()
     to_visit = deque([(start_url, 0)])
     scraped_links = []
 
@@ -35,7 +34,6 @@ def scrape_links_iteration(start_url, max_depth):
                         if absolute_url.startswith(base_url):
                             scraped_links.append(absolute_url)
                             to_visit.append((absolute_url, depth + 1))
-                            visited.add(absolute_url)
 
         except Exception as e:
             print(f"Error: {str(e)}")
