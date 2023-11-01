@@ -2,9 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 from collections import deque
-
-base_url = 'https://ollama.ai/blog'
-max_depth = 2
+import argparse
 
 def scrape_links_recursive(start_url, max_depth):
     visited = set()
@@ -36,5 +34,14 @@ def scrape_links_recursive(start_url, max_depth):
         except Exception as e:
             print(f"Error: {str(e)}")
 
-start_url = base_url
-scrape_links_recursive(start_url, max_depth)
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--base_url", type=str, required=True, help="Base URL to start scraping from")
+    parser.add_argument("--max_depth", type=int, required=True, help="Maximum depth for recursion")
+    args = parser.parse_args()
+
+    base_url = args.base_url
+    max_depth = args.max_depth
+    start_url = base_url
+
+    scrape_links_recursive(start_url, max_depth)
