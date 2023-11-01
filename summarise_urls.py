@@ -13,6 +13,15 @@ def save_result_to_file(result, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write('\n'.join(result))
 
+def create_or_empty_folder(folder_path):
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    else:
+        for filename in os.listdir(folder_path):
+            file_path = os.path.join(folder_path, filename)
+            if os.path.isfile(file_path):
+                os.unlink(file_path)
+
 def scrape_links_iteration(start_url, max_depth, data_folder):
     visited = set()
     to_visit = deque([(start_url, 0)])
@@ -80,6 +89,8 @@ if __name__ == "__main__":
     max_depth = args.max_depth
     start_url = base_url
     data_folder = args.data_folder
+
+    create_or_empty_folder(data_folder)  # Create or empty the data folder
 
     unique_scraped_links = scrape_links_iteration(start_url, max_depth, data_folder)
     print(f"Found {len(unique_scraped_links)} final links from base URL: {base_url}")
