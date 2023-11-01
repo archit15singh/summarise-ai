@@ -1,8 +1,8 @@
 # summarise-ai
 
-provide a base url to it
-it will get all the links in it.
-it will scrape the content from it and summarise the text.
+- provide a base url to it
+- it will get all the links in it recursively
+- it will scrape the content from all the urls and summarise the text for each.
 
 
 docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/llama2
