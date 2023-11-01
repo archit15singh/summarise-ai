@@ -7,7 +7,7 @@ from langchain.llms import Ollama
 from langchain.document_loaders import WebBaseLoader
 from langchain.chains.summarize import load_summarize_chain
 
-def scrape_links_recursive(start_url, max_depth):
+def scrape_links_iteration(start_url, max_depth):
     visited = set()
     to_visit = deque([(start_url, 0)])
     scraped_links = []
@@ -65,7 +65,7 @@ if __name__ == "__main__":
     max_depth = args.max_depth
     start_url = base_url
 
-    unique_scraped_links = scrape_links_recursive(start_url, max_depth)
+    unique_scraped_links = scrape_links_iteration(start_url, max_depth)
     for link in unique_scraped_links:
         print('*'*100)
         process_url(link)
