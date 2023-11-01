@@ -8,7 +8,7 @@ max_depth = 2
 
 def scrape_links_recursive(start_url, max_depth):
     visited = set()
-    to_visit = deque([(start_url, 0])
+    to_visit = deque([(start_url, 0)])
 
     while to_visit:
         current_url, depth = to_visit.popleft()
