@@ -3,7 +3,6 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin, urlparse
 from collections import deque
 import argparse
-from tqdm import tqdm
 import os
 from langchain.llms import Ollama
 from langchain.document_loaders import WebBaseLoader
@@ -84,8 +83,7 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
 
         try:
             links = scrape_links(current_url)
-            tqdm_links = tqdm(links, desc=f"Scraping {current_url}")
-            for link in tqdm_links:
+            for link in links:
                 scraped_links.append(link)
                 to_visit.append((link, depth + 1))
                 visited.add(link)
