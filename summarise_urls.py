@@ -144,7 +144,7 @@ if __name__ == "__main__":
     )
 
     with ThreadPoolExecutor(max_workers=5) as executor:
-        for link in tqdm(unique_scraped_links):
+        for link in unique_scraped_links:
             executor.submit(process_url, link, data_folder)
     e = time.time()
     print(e-s)
