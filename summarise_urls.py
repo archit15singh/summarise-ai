@@ -46,7 +46,7 @@ def scrape_links(url):
             return scraped_links
 
     except Exception as e:
-        print(f"Error: {str(e}")
+        print(f"Error: {str(e)}")
 
     return []
 
