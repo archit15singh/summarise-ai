@@ -66,7 +66,7 @@ if __name__ == "__main__":
     start_url = base_url
 
     unique_scraped_links = scrape_links_iteration(start_url, max_depth)
-    print(f"found {len(unique_scraped_links} final from url:{base_url}")
+    print(f"found {len(unique_scraped_links)} final from url:{base_url}")
     for link in unique_scraped_links:
         print('*'*100)
         process_url(link)
