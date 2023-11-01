@@ -99,7 +99,7 @@ def process_url(url, data_folder):
         llm = Ollama(model="llama2")
         chain = load_summarize_chain(llm, chain_type="stuff")
         result = chain.run(docs)
-        print(f"Length of result for {url}: {len(result}")
+        print(f"Length of result for {url}: {len(result)}")
         result_filename = os.path.join(data_folder, f"{url.replace('/', '_')}_result.txt")
         save_result_to_file(result, result_filename)
     except Exception as e:
