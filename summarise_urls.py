@@ -53,7 +53,7 @@ def process_url(url):
     docs = loader.load()
     print(f"length: {len(docs[0].page_content)} for url: {url}")
 
-    llm = Ollama(model="mistral-openorca")
+    llm = Ollama(model="llama2")
     chain = load_summarize_chain(llm, chain_type="stuff")
     result = chain.run(docs)
     print(f"Length of result for {url}: {len(result)}")
