@@ -98,10 +98,10 @@ def scrape_links_iteration(start_url, max_depth, data_folder):
 
 def process_url(url, data_folder):
     try:
-        print(f"Processing URL: {url}")
+        # print(f"Processing URL: {url}")
         loader = WebBaseLoader(url)
         docs = loader.load()
-        print(f"length: {len(docs[0].page_content)} for url: {url}")
+        # print(f"length: {len(docs[0].page_content)} for url: {url}")
 
         llm = Ollama(model="llama2")
         chain = load_summarize_chain(llm, chain_type="stuff")
